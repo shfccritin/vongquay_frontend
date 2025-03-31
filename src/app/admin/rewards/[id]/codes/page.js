@@ -31,7 +31,7 @@ export default function ImportRewardCodes({ params }) {
     }
 
     try {
-      const res = await axios.post("${process.env.NEXT_PUBLIC_API_URL}/api/admin/reward-codes/import", {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/reward-codes/import`, {
         rewardId,
         codes
       }, {
