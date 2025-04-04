@@ -52,7 +52,7 @@ export default function Home() {
     window.onTelegramAuth = async function (user) {
       try {
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/send-telegram`, {
-          telegramId: user.id,
+          user, 
           code: rewardsCode,
           reward: result
         });
