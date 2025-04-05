@@ -145,12 +145,8 @@ export default function Home() {
       <h1 className="text-3xl md:text-4xl font-bold text-pink-600 text-center mb-8">
         🎯 Vòng quay dự thưởng
       </h1>
-
       {!isValid ? (
         <div className="flex flex-col xl:flex-row gap-8 justify-center items-start">
-
-
-          {/* kiểm tra mã */}
           <div className="flex justify-center gap-3 mb-6 flex-wrap">
             <input
               type="text"
@@ -166,8 +162,6 @@ export default function Home() {
               Kiểm tra mã
             </button>
           </div>
-
-          {/* 🕓 Lịch sử quay */}
           <div className="w-full xl:w-1/4 bg-white rounded-xl shadow p-5">
             <h2 className="text-lg font-bold text-center mb-4 text-pink-600">
               🕓 Lịch sử quay
@@ -189,8 +183,6 @@ export default function Home() {
 
       ) : (
         <div className="flex flex-col xl:flex-row gap-8 justify-center items-start">
-
-          {/* 🎁 Danh sách giải thưởng */}
           <div className="w-full xl:w-1/5 bg-white rounded-xl shadow p-5">
             <h2 className="text-lg font-bold text-center mb-4 text-pink-600">
               🎁 Giải thưởng

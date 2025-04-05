@@ -17,6 +17,7 @@ export default function AdminHeader() {
     { href: "/admin/dashboard", label: "Mã Dự Thưởng" },
     { href: "/admin/rewards", label: "Giải thưởng" },
     { href: "/admin/logs", label: "Lịch sử quay" },
+    { href: "/admin/broadcast", label: "Broadcast" },
   ];
 
   return (
