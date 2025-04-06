@@ -58,7 +58,7 @@ export default function BroadcastPage() {
   return (
     <>
       <Header />
-      <div className="p-6 max-w-xl mx-auto text-center">
+      <div className="p-6 max-w-xl mx-auto text-center bg-white">
         <h1 className="text-2xl font-bold mb-4">📢 Gửi thông báo livestream</h1>
 
         <textarea
