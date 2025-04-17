@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2"; 
 import axios from "axios";
-import AdminHeader from "../../../components/header";
+import Header from '../../../components/header';
+
 
 import { useRouter } from "next/navigation";
 export default function AdminLogs() {
@@ -41,7 +42,7 @@ export default function AdminLogs() {
 
   return (
     <main className="p-8 bg-slate-50 min-h-screen">
-       <AdminHeader></AdminHeader>
+       <Header></Header>
       <div className="flex gap-4 mb-6">
         <input
           type="text"

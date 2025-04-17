@@ -3,7 +3,8 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { io } from 'socket.io-client';
-import AdminHeader from '../../../components/header';
+import Header from '../../../components/header';
+
 import { useRouter } from 'next/navigation';
 let socket;
 
@@ -88,7 +89,7 @@ export default function AdminChatPage() {
 
     return (
         <div>
-            <AdminHeader></AdminHeader>
+            <Header></Header>
 
             <div className="flex h-screen bg-[#1e1e2f] text-white">
                 {/* === SIDEBAR === */}

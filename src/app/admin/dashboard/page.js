@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
-import AdminHeader from "../../../components/header";
+import Header from '../../../components/header';
+
 export default function AdminDashboard() {
   const [codes, setCodes] = useState([]);
   const [newCode, setNewCode] = useState("");
@@ -110,7 +111,7 @@ export default function AdminDashboard() {
 
   return (
     <main className="p-8 bg-slate-50 min-h-screen">
-      <AdminHeader></AdminHeader>
+      <Header></Header>
       <div className="flex items-center gap-4 mb-6">
         <input
           type="file"

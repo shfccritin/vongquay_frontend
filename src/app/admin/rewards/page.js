@@ -1,7 +1,8 @@
 'use client'
 import { useEffect, useState } from "react";
 import axios from "axios";
-import AdminHeader from "../../../components/header";
+import Header from '../../../components/header';
+
 
 import Swal from "sweetalert2";
 import Link from "next/link";
@@ -127,7 +128,7 @@ export default function AdminRewards() {
   }, []);
   return (
     <main className="p-8 bg-gradient-to-br from-yellow-50 to-pink-100 min-h-screen">
-      <AdminHeader />
+      <Header />
 
       {/* Form nhập hoặc sửa */}
       <div className="bg-white p-6 rounded-xl shadow-md mb-8 space-y-4">

@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
-import AdminHeader from "../../../components/header";
+import Header from '../../../../../components/header';
+
 
 import { use } from "react";
 export default function ImportRewardCodes({ params }) {
@@ -99,7 +100,7 @@ export default function ImportRewardCodes({ params }) {
 
   return (
     <div className="p-6 md:p-10 bg-gradient-to-br from-pink-50 to-yellow-50 min-h-screen mx-auto">
-      <AdminHeader />
+      <Header />
       <h1 className="text-3xl font-bold text-pink-600 mb-8">🎁 Nhập mã đổi thưởng</h1>
 
       {/* Danh sách mã đã nhập */}

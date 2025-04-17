@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import AdminHeader from '../../../components/header';
+import Header from '../../../components/header';
+
 import { useRouter } from 'next/navigation';
 
 export default function SchedulePage() {
@@ -19,7 +20,6 @@ export default function SchedulePage() {
 
   const router = useRouter();
 
-  // 👉 Gắn token cho mọi request
   useEffect(() => {
     axios.interceptors.request.use(
       (config) => {
@@ -75,7 +75,7 @@ export default function SchedulePage() {
 
   return (
     <main className="p-6 max-xl mx-auto bg-white min-h-screen">
-      <AdminHeader />
+      <Header />
       <h1 className="text-xl font-bold mb-4">🗓 Quản lý lịch phát livestream</h1>
 
       {/* Form thêm */}
