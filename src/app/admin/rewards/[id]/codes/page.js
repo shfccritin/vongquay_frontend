@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
-import AdminHeader from "@/components/header";
+import AdminHeader from "../../../components/header";
+
 import { use } from "react";
 export default function ImportRewardCodes({ params }) {
   const [codeText, setCodeText] = useState("");

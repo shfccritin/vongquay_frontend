@@ -18,6 +18,8 @@ export default function AdminHeader() {
     { href: "/admin/rewards", label: "Giải thưởng" },
     { href: "/admin/logs", label: "Lịch sử quay" },
     { href: "/admin/broadcast", label: "Broadcast" },
+    { href: "/admin/chat", label: "Chat" },
+    { href: "/admin/schedule", label: "Lịch Bình Luận" },
   ];
 
   return (

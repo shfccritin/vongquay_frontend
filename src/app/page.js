@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import Wheel from "@/components/Wheel";
+import Wheel from "../components/Wheel";
 import Swal from 'sweetalert2';
 export default function Home() {
   const [code, setCode] = useState("");

@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2"; 
 import axios from "axios";
-import AdminHeader from "@/components/header";
+import AdminHeader from "../../../components/header";
+
 import { useRouter } from "next/navigation";
 export default function AdminLogs() {
   const [logs, setLogs] = useState([]);

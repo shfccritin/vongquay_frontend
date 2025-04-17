@@ -1,7 +1,8 @@
 'use client'
 import { useEffect, useState } from "react";
 import axios from "axios";
-import AdminHeader from "@/components/header";
+import AdminHeader from "../../../components/header";
+
 import Swal from "sweetalert2";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

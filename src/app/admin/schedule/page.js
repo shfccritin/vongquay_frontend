@@ -1,0 +1,123 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import AdminHeader from '../../../components/header';
+import { useRouter } from 'next/navigation';
+
+export default function SchedulePage() {
+  const [schedules, setSchedules] = useState([]);
+  const [form, setForm] = useState({
+    blv: '',
+    time: '',
+    date: '',
+    game: '',
+    link: '',
+    countdown: 10,
+  });
+
+  const router = useRouter();
+
+  // 👉 Gắn token cho mọi request
+  useEffect(() => {
+    axios.interceptors.request.use(
+      (config) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
+  }, []);
+
+  // 👉 Redirect nếu chưa đăng nhập
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/admin');
+    } else {
+      fetchSchedules();
+    }
+  }, [router]);
+
+  const fetchSchedules = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/schedules`);
+    setSchedules(res.data);
+  };
+
+  const handleAdd = async () => {
+    try {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/schedules`, form);
+      setForm({ blv: '', time: '', date: '', game: '', link: '', countdown: 10 });
+      fetchSchedules();
+      Swal.fire('Thành công!', 'Lịch đã được thêm.', 'success');
+    } catch (err) {
+      Swal.fire('Lỗi!', err.response?.data?.message || 'Không thể thêm lịch.', 'error');
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: 'Bạn có chắc muốn xoá?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Xoá',
+    });
+    if (result.isConfirmed) {
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/schedules/${id}`);
+      fetchSchedules();
+      Swal.fire('Đã xoá!', '', 'success');
+    }
+  };
+
+  return (
+    <main className="p-6 max-xl mx-auto bg-white min-h-screen">
+      <AdminHeader />
+      <h1 className="text-xl font-bold mb-4">🗓 Quản lý lịch phát livestream</h1>
+
+      {/* Form thêm */}
+      <div className="grid grid-cols-2 gap-4 mb-6">
+        <input placeholder="Tên BLV" className="border px-3 py-2 rounded" value={form.blv} onChange={(e) => setForm({ ...form, blv: e.target.value })} />
+        <input placeholder="Thời gian (vd: 21h30)" className="border px-3 py-2 rounded" value={form.time} onChange={(e) => setForm({ ...form, time: e.target.value })} />
+        <input type="date" className="border px-3 py-2 rounded" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} />
+        <input placeholder="Game (vd: nổ hũ)" className="border px-3 py-2 rounded" value={form.game} onChange={(e) => setForm({ ...form, game: e.target.value })} />
+        <input placeholder="Link livestream" className="col-span-2 border px-3 py-2 rounded" value={form.link} onChange={(e) => setForm({ ...form, link: e.target.value })} />
+        <input type="number" placeholder="Countdown (phút trước)" className="border px-3 py-2 rounded" value={form.countdown} onChange={(e) => setForm({ ...form, countdown: e.target.value })} />
+        <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={handleAdd}>➕ Thêm lịch</button>
+      </div>
+
+      {/* Danh sách */}
+      <table className="w-full text-sm border">
+        <thead className="bg-gray-100">
+          <tr>
+            <th className="p-2 text-left">#</th>
+            <th>BLV</th>
+            <th>Giờ</th>
+            <th>Ngày</th>
+            <th>Game</th>
+            <th>Đã gửi?</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {schedules.map((s, i) => (
+            <tr key={s._id} className="border-t hover:bg-gray-50">
+              <td className="p-2">{i + 1}</td>
+              <td>{s.blv}</td>
+              <td>{s.time}</td>
+              <td>{s.date?.slice(0, 10)}</td>
+              <td>{s.game}</td>
+              <td>{s.sent ? '✅' : '⏳'}</td>
+              <td>
+                <button className="text-red-500 text-sm" onClick={() => handleDelete(s._id)}>🗑 Xoá</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </main>
+  );
+}

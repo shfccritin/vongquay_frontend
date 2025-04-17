@@ -1,19 +1,18 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Header from '@/components/header';
+import Header from '../../../components/header';
 
 export default function BroadcastPage() {
   const router = useRouter();
   const [message, setMessage] = useState(`🚨 *SẮP LIVE PK RỒI ĐÂY ANH/CHỊ ƠI!*\n🎁 Chuẩn bị nhận code & quà siêu hot\n🕒 Bắt đầu sau 15 phút nữa nha!`);
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  // ✅ Check token khi vào trang
+  
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
-      router.push('/admin'); // redirect nếu chưa đăng nhập
+      router.push('/admin'); 
     }
   }, [router]);
 

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
-import AdminHeader from "@/components/header";
+import AdminHeader from "../../../components/header";
 export default function AdminDashboard() {
   const [codes, setCodes] = useState([]);
   const [newCode, setNewCode] = useState("");

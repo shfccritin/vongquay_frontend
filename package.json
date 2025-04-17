@@ -15,10 +15,13 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-toastify": "^11.0.5",
+    "socket.io-client": "^4.8.1",
     "sweetalert2": "^11.17.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4"
+    "@types/react": "19.1.2",
+    "tailwindcss": "^4",
+    "typescript": "5.8.3"
   }
 }
