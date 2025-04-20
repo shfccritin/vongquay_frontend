@@ -1,120 +1,160 @@
-'use client'
+// components/Wheel.jsx
+'use client';
 import React, {
   useEffect,
   useRef,
   useState,
   forwardRef,
-  useImperativeHandle
+  useImperativeHandle,
 } from 'react';
 
-const Wheel = forwardRef(({ segments, onSpinEnd }, ref) => {
+/**
+ * Component Vòng Quay:
+ * - Hiển thị trên nền '/img/wheel.svg'
+ * - Canvas quay nằm giữa ngang, lệch lên chút theo chiều dọc
+ * - Kim chỉ (pointer) nằm trên cùng, ở chính giữa ngang
+ * - Nút quay dùng ảnh 'spin-button.svg', kích thước 125x125, nằm chính giữa
+ *
+ * Props:
+ * - segments: mảng đối tượng { label: string }
+ * - segmentColors: (tuỳ chọn) mảng chuỗi màu CSS cho từng phân đoạn
+ * - onSpinEnd: callback khi kết thúc quay
+ */
+const Wheel = forwardRef(({ segments, segmentColors, onSpinEnd }, ref) => {
+  const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const [angle, setAngle] = useState(0);
   const [spinning, setSpinning] = useState(false);
+  const [size, setSize] = useState(0);
   const currentReward = useRef(null);
+  const arcSize = (2 * Math.PI) / segments.length;
+  const defaultColors = ['#FFF8E5', '#FFB53E'];
 
-  const size = typeof window !== 'undefined' && window.innerWidth < 768 ? 300 : 600;
-
-  const radius = size / 2;
-
-  const colors = [
-    '#f06595', '#ffe066', '#74c0fc', '#b197fc',
-    '#63e6be', '#ffa8a8', '#ffd43b', '#d0bfff'
-  ];
-
+  // Quan sát kích thước container để giữ tỉ lệ vuông
   useEffect(() => {
-    drawWheel();
-  }, [segments, angle]);
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        setSize(entry.contentRect.width);
+      }
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
-  const drawWheel = () => {
+  // Vẽ phân đoạn
+  useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas || size === 0) return;
+    canvas.width = size;
+    canvas.height = size;
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, size, size);
 
-    const arcSize = (2 * Math.PI) / segments.length;
-
+    const radius = size / 2;
     ctx.save();
     ctx.translate(radius, radius);
-    ctx.rotate(-Math.PI / 2);
+    ctx.rotate(angle - Math.PI / 2);
     ctx.translate(-radius, -radius);
 
-    segments.forEach((segment, i) => {
-      const start = angle + i * arcSize;
-      const end = start + arcSize;
-
+    segments.forEach((seg, i) => {
+      const start = i * arcSize;
       ctx.beginPath();
       ctx.moveTo(radius, radius);
-      ctx.arc(radius, radius, radius, start, end);
-      ctx.fillStyle = colors[i % colors.length];
+      ctx.arc(radius, radius, radius, start, start + arcSize);
+      ctx.closePath();
+      const fillColor =
+        segmentColors?.[i] || defaultColors[i % defaultColors.length];
+      ctx.fillStyle = fillColor;
       ctx.fill();
 
+      // Vẽ nhãn, đẩy ra gần viền ngoài
       ctx.save();
       ctx.translate(radius, radius);
       ctx.rotate(start + arcSize / 2);
       ctx.fillStyle = '#000';
-      const fontSize = size / 30; 
-      ctx.font = `bold ${fontSize}px sans-serif`;
+      ctx.font = `bold ${size / 30}px sans-serif`;
       ctx.textAlign = 'center';
-      ctx.fillText(segment.label, radius / 2.5, 0);
+      ctx.fillText(seg.label, radius * 0.65, 0); // đặt label ở 80% bán kính
       ctx.restore();
     });
 
     ctx.restore();
+  }, [segments, segmentColors, angle, size]);
 
-    // 👉 Kim bên phải (3h)
-    ctx.beginPath();
-    ctx.moveTo(size, radius); // mũi kim
-    ctx.lineTo(size - 30, radius - 15); // cạnh trên
-    ctx.lineTo(size - 30, radius + 15); // cạnh dưới
-    ctx.fillStyle = '#000';
-    ctx.fill();
-  };
-
-  const spinToIndex = (targetIndex, rewardInfo) => {
-    if (spinning) return;
-
+  // Hiệu ứng quay
+  const spinToIndex = (index, rewardInfo) => {
+    if (spinning || size === 0) return;
     currentReward.current = rewardInfo;
-
-    const totalSegments = segments.length;
-    const arcDeg = 360 / totalSegments;
-    const middleOfTarget = arcDeg * (targetIndex + 0.5);
-    const stopAngleDeg = 360 * 10 + 90 - middleOfTarget;
-    const finalAngleRad = (stopAngleDeg * Math.PI) / 180;
+    const rotations = 6;
+    const targetDeg =
+      rotations * 360 + 90 - (360 / segments.length) * (index + 0.5);
+    const targetRad = (targetDeg * Math.PI) / 180;
     const duration = 3000;
-    const startTime = performance.now();
-
+    const start = performance.now();
     setSpinning(true);
-
     const animate = (now) => {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const easeOut = 1 - Math.pow(1 - progress, 3);
-      setAngle(easeOut * finalAngleRad);
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
+      const t = Math.min((now - start) / duration, 1);
+      const easeOut = 1 - Math.pow(1 - t, 3);
+      setAngle(easeOut * targetRad);
+      if (t < 1) requestAnimationFrame(animate);
+      else {
         setSpinning(false);
-        onSpinEnd(currentReward.current);
+        onSpinEnd?.(currentReward.current);
       }
     };
-
     requestAnimationFrame(animate);
   };
 
   useImperativeHandle(ref, () => ({ spinToIndex }));
 
   return (
-    <div className="flex flex-col items-center">
+    <div ref={containerRef} className="relative w-full aspect-square">
+      {/* Nền vòng quay */}
+      <img
+        src="/img/wheel.svg"
+        alt="Nền vòng quay"
+        className="absolute inset-0 w-full h-full object-contain"
+      />
+
+      {/* Canvas quay */}
       <canvas
         ref={canvasRef}
-        width={size}
-        height={size}
-        className="rounded-full shadow-2xl border-[6px] border-pink-400"
+        className="absolute left-1/2 top-1/2 w-[72%] h-[72%] -translate-x-1/2 -translate-y-[57%]
+          rounded-full"
       />
+
+      {/* Kim chỉ */}
+      <img
+        src="/img/kim.png"
+        alt="Kim chỉ"
+        className="pointer-events-none absolute w-[44px] h-[66px] left-1/2 top-0 -translate-x-1/2
+          z-10"
+      />
+
+      {/* Nút Quay */}
+      <button
+        onClick={() =>
+          spinToIndex(Math.floor(Math.random() * segments.length), null)
+        }
+        className="absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2 z-20 w-[20%]
+          h-[20%] p-0"
+      >
+        <img
+          src="/img/spin-button.svg"
+          alt="Spin"
+          className="w-full h-full object-contain"
+        />
+      </button>
+
+      {/* Thông báo đang quay */}
       {spinning && (
-        <div className="text-2xl mt-4 font-bold text-yellow-600 animate-pulse">
-          ⏳ Đang quay...
+        <div
+          className="absolute left-1/2 top-[75%] -translate-x-1/2 text-xl font-semibold text-red-600
+            animate-pulse"
+        >
+          Đang quay...
         </div>
       )}
     </div>

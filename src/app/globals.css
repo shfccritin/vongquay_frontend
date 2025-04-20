@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
@@ -23,4 +23,41 @@ body {
   background: var(--background);
   color: black;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.test {
+  border-radius: 23.121px;
+  border: 1.156px solid var(#fff);
+  background: var(
+    --Linear,
+    linear-gradient(
+      158deg,
+      rgba(255, 153, 0, 0.6) -2.92%,
+      rgba(255, 216, 159, 0.6) 78.44%
+    )
+  );
+  box-shadow: 0px 11.56px 23.121px 0px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(11.560468673706055px);
+}
+
+.text-special {
+  color: #373737;
+  -webkit-text-stroke-width: 1.16px;
+  -webkit-text-stroke-color: #000;
+  font-family: 'system-ui';
+  font-size: 41.618px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+.text-special-2 {
+  background: var(
+    --Radial,
+    radial-gradient(454.52% 111.36% at 2.52% 50%, #fff8e5 0%, #ffb53e 70.94%)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
