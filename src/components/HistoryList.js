@@ -4,13 +4,15 @@ import React from 'react';
 export default function HistoryList({ logs }) {
   return (
     <div
-      className="test px-6 py-10 h-[889px] relative rounded-3xl outline-1
+      className="test sm:px-6 sm:py-10 px-3 py-5 h-[889px] relative rounded-3xl outline-1
         outline-offset-[-1.16px] outline-black/20 backdrop-blur-md overflow-hidden"
     >
       <div className="w-full inline-flex flex-col justify-start items-start gap-9">
-        <div className="inline-flex justify-start items-end gap-2">
-          <img className="w-16 h-14" src="/icon/fire.png" />
-          <div className="justify-center text-special">lịch sử quay</div>
+        <div className="inline-flex justify-start items-center gap-2">
+          <img className="sm:w-16 sm:h-14 w-10 h-8" src="/icon/fire.png" />
+          <div className="justify-center text-3xl sm:text-4xl text-special">
+            lịch sử quay
+          </div>
         </div>
         <div className="self-stretch flex flex-col justify-start items-start gap-4">
           {logs.map((item, i) => (
@@ -25,7 +27,7 @@ export default function HistoryList({ logs }) {
                   rounded-[4.5px] shadow-[0px_4.624px_11.560px_0px_rgba(0,0,0,0.25)]
                   overflow-hidden flex items-center justify-start px-3"
               >
-                <div className="inline-flex justify-center items-center gap-8 2xl:gap-4">
+                <div className="inline-flex justify-center items-center gap-2 2xl:gap-4">
                   <div className="flex w-[165px] justify-center items-center gap-1">
                     <img className="w-8 h-8" src="/icon/coupon.png" />
                     <div className="text-neutral-950 line-clamp-2 text-base font-bold capitalize">

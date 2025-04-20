@@ -158,14 +158,14 @@ export default function Home() {
     <main
       className="min-h-screen [background-color:lightgray]
         [background-image:linear-gradient(180deg,_rgba(255,255,255,0)_46.01%,_#FFF_100%),url('/img/bg.jpg')]
-        p-6"
+        p-3 sm:p-6"
     >
       {/* <h1 className="text-3xl md:text-4xl font-bold text-pink-600 text-center mb-8">
         🎯 Vòng quay dự thưởng
       </h1> */}
 
       {/* {!isValid ? ( */}
-      {!isValid ? (
+      {false ? (
         <div className="flex flex-col 2xl:flex-row gap-8 justify-center items-start">
           {/* <div className="flex justify-center gap-3 mb-6 flex-wrap">
             <input
@@ -257,7 +257,7 @@ export default function Home() {
                 onSpinEnd={handleSpinEnd}
               />
               <div
-                className="w-96 mt-8 h-16 relative
+                className="w-84 sm:w-96 mt-8 h-16 relative
                   bg-[radial-gradient(ellipse_97.48%_397.92%_at_2.52%_50.00%,_#050505_0%,_#2A2A2A_71%)]
                   rounded-lg
                   shadow-[0px_3.388185501098633px_16.940927505493164px_0px_rgba(0,0,0,0.25)]

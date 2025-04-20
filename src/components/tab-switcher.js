@@ -5,7 +5,7 @@ import HistoryList from './HistoryList';
 
 export default function TabSwitcher({ rewards, logs, className = '' }) {
   const tabs = [
-    { label: 'Giải Thưởng Hoạt Động', key: 'rewards' },
+    { label: 'Giải Thưởng', key: 'rewards' },
     { label: 'Danh Sách Thắng', key: 'history' },
   ];
   const [active, setActive] = useState('rewards');
@@ -25,9 +25,7 @@ export default function TabSwitcher({ rewards, logs, className = '' }) {
                 : 'bg-[#111111] text-white'
             }`}
           >
-            <span className="text-base font-medium capitalize">
-              {tab.label}
-            </span>
+            <span className="text-base font-bold capitalize">{tab.label}</span>
           </button>
         ))}
       </div>
