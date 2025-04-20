@@ -20,6 +20,7 @@ export default function AdminHeader() {
     { href: "/admin/broadcast", label: "Broadcast" },
     { href: "/admin/chat", label: "Chat" },
     { href: "/admin/schedule", label: "Lịch Bình Luận" },
+    { href: "/admin/import", label: "Import" },
   ];
 
   return (
