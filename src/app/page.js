@@ -183,7 +183,10 @@ export default function Home() {
               Kiểm tra mã
             </button>
           </div> */}
-          <div className="w-full max-w-[924px] inline-flex flex-col items-center gap-16 mx-auto 2xl:mx-0">
+          <div
+            className="w-full mt-15 max-w-[924px] inline-flex flex-col items-center gap-16 mx-auto
+              2xl:mx-0"
+          >
             <img
               src="/img/title.png"
               alt="Title"
@@ -193,9 +196,10 @@ export default function Home() {
             <div
               className="w-full p-6
                 bg-[radial-gradient(ellipse_97.48%_397.92%_at_2.52%_50%,_#FFB53E_29%,_#FFF8E5_100%)]
-                rounded-[452.58px] outline-2 outline-offset-[-2.26px] outline-white"
+                sm:rounded-[452.58px] rounded-3xl outline-2 outline-offset-[-2.26px]
+                outline-white"
             >
-              <div className="w-full flex items-center justify-center gap-4">
+              <div className="w-full sm:flex-row flex-col flex items-center justify-center gap-4">
                 <input
                   type="text"
                   placeholder="Nhập mã dự thưởng..."
@@ -204,8 +208,8 @@ export default function Home() {
                 />
                 <button
                   onClick={handleCheckCode}
-                  className="h-12 px-6 bg-red-500 text-white rounded-full font-semibold hover:bg-red-600
-                    transition-shrink-0"
+                  className="h-12 px-6 text-nowrap bg-red-500 text-white rounded-full font-semibold
+                    hover:bg-red-600 transition-shrink-0"
                 >
                   Kiểm tra mã
                 </button>
