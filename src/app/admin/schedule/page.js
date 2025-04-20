@@ -59,7 +59,7 @@ export default function SchedulePage() {
     if (!/^\d{1,2}h\d{1,2}$/.test(time)) {
       return Swal.fire('Sai định dạng giờ', 'Định dạng phải là ví dụ: 21h30', 'warning');
     }
-  
+   
     if (isNaN(countdown) || countdown < 0) {
       return Swal.fire('Countdown không hợp lệ', 'Countdown phải là số không âm', 'warning');
     }
