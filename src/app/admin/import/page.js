@@ -60,7 +60,7 @@ const handleSubmit = async () => {
     setUploading(true);
   
     try {
-      const res = await axios.post('http://localhost:5000/manychat/batch', {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/manychat/batch`, {
         ids,
       });
   
