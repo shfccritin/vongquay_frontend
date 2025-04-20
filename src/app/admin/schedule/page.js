@@ -49,6 +49,21 @@ export default function SchedulePage() {
   };
 
   const handleAdd = async () => {
+    const { blv, time, date, countdown } = form;
+  
+    // Kiểm tra dữ liệu đầu vào
+    if (!blv || !time || !date) {
+      return Swal.fire('Thiếu thông tin', 'Vui lòng nhập đầy đủ Tên BLV, Thời gian và Ngày!', 'warning');
+    }
+  
+    if (!/^\d{1,2}h\d{1,2}$/.test(time)) {
+      return Swal.fire('Sai định dạng giờ', 'Định dạng phải là ví dụ: 21h30', 'warning');
+    }
+  
+    if (isNaN(countdown) || countdown < 0) {
+      return Swal.fire('Countdown không hợp lệ', 'Countdown phải là số không âm', 'warning');
+    }
+  
     try {
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/schedules`, form);
       setForm({ blv: '', time: '', date: '', game: '', link: '', countdown: 10 });
@@ -58,6 +73,7 @@ export default function SchedulePage() {
       Swal.fire('Lỗi!', err.response?.data?.message || 'Không thể thêm lịch.', 'error');
     }
   };
+  
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
