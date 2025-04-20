@@ -147,16 +147,6 @@ const Wheel = forwardRef(({ segments, segmentColors, onSpinEnd }, ref) => {
           className="w-full h-full object-contain"
         />
       </button>
-
-      {/* Thông báo đang quay */}
-      {spinning && (
-        <div
-          className="absolute left-1/2 top-[75%] -translate-x-1/2 text-xl font-semibold text-red-600
-            animate-pulse"
-        >
-          Đang quay...
-        </div>
-      )}
     </div>
   );
 });

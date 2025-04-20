@@ -165,9 +165,9 @@ export default function Home() {
       </h1> */}
 
       {/* {!isValid ? ( */}
-      {false ? (
-        <div className="flex flex-col xl:flex-row gap-8 justify-center items-start">
-          <div className="flex justify-center gap-3 mb-6 flex-wrap">
+      {!isValid ? (
+        <div className="flex flex-col 2xl:flex-row gap-8 justify-center items-start">
+          {/* <div className="flex justify-center gap-3 mb-6 flex-wrap">
             <input
               type="text"
               placeholder="Nhập mã dự thưởng..."
@@ -182,8 +182,37 @@ export default function Home() {
             >
               Kiểm tra mã
             </button>
+          </div> */}
+          <div className="w-full max-w-[924px] inline-flex flex-col items-center gap-16 mx-auto 2xl:mx-0">
+            <img
+              src="/img/title.png"
+              alt="Title"
+              className="w-full max-w-[799px] h-auto object-contain"
+            />
+
+            <div
+              className="w-full p-6
+                bg-[radial-gradient(ellipse_97.48%_397.92%_at_2.52%_50%,_#FFB53E_29%,_#FFF8E5_100%)]
+                rounded-[452.58px] outline-2 outline-offset-[-2.26px] outline-white"
+            >
+              <div className="w-full flex items-center justify-center gap-4">
+                <input
+                  type="text"
+                  placeholder="Nhập mã dự thưởng..."
+                  className="w-full md:w-[591.13px] h-12 bg-slate-800 rounded-[743.56px] border-4
+                    border-slate-600 p-3 text-white placeholder-gray-400"
+                />
+                <button
+                  onClick={handleCheckCode}
+                  className="h-12 px-6 bg-red-500 text-white rounded-full font-semibold hover:bg-red-600
+                    transition-shrink-0"
+                >
+                  Kiểm tra mã
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="w-full xl:w-1/4 bg-white rounded-xl shadow p-5">
+          {/* <div className="w-full 2xl:w-1/4 bg-white rounded-xl shadow p-5">
             <h2 className="text-lg font-bold text-center mb-4 text-pink-600">
               🕓 Lịch sử quay
             </h2>
@@ -203,17 +232,17 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
         </div>
       ) : (
-        <div className="flex w-full flex-col xl:flex-row gap-20 justify-center items-start">
+        <div className="flex w-full flex-col 2xl:flex-row gap-20 justify-center items-start">
           {/*  Qua */}
-          <div className="xl:w-[25%] hidden xl:inline-flex">
+          <div className="2xl:w-[25%] hidden 2xl:inline-flex">
             <RewardList rewards={rewards} />
           </div>
 
           {/* 🎡 Vòng quay */}
-          <div className="xl:w-[30%] w-full flex flex-col items-center justify-center">
+          <div className="2xl:w-[30%] w-full flex flex-col items-center justify-center">
             <div className="max-w-[600px] flex flex-col items-center">
               <div className="h-[200px] mb-4 flex justify-center">
                 <img src="/img/title.png" alt="title" />
@@ -258,11 +287,11 @@ export default function Home() {
           </div>
 
           {/* 🕓 Lịch sử quay */}
-          <div className="hidden xl:block xl:w-[25%]">
+          <div className="hidden 2xl:block 2xl:w-[25%]">
             <HistoryList logs={logs} />
           </div>
           <TabSwitcher
-            className="xl:hidden w-full max-w-[600px] mx-auto"
+            className="2xl:hidden w-full max-w-[600px] mx-auto"
             rewards={rewards}
             logs={logs}
           />

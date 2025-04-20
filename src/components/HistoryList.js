@@ -25,8 +25,8 @@ export default function HistoryList({ logs }) {
                   rounded-[4.5px] shadow-[0px_4.624px_11.560px_0px_rgba(0,0,0,0.25)]
                   overflow-hidden flex items-center justify-start px-3"
               >
-                <div className="inline-flex justify-center items-center gap-8">
-                  <div className="flex justify-center items-center gap-3">
+                <div className="inline-flex justify-center items-center gap-8 2xl:gap-4">
+                  <div className="flex w-[165px] justify-center items-center gap-1">
                     <img className="w-8 h-8" src="/icon/coupon.png" />
                     <div className="text-neutral-950 line-clamp-2 text-base font-bold capitalize">
                       {item.code}
