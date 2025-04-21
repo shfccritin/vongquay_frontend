@@ -249,7 +249,7 @@ export default function Home() {
           </div>
 
           {/* 🎡 Vòng quay */}
-          <div className="2xl:w-[35%] w-full flex flex-col items-center justify-center">
+          <div className="2xl:w-[28%] w-full flex flex-col items-center justify-center">
             <div className="max-w-[600px] w-full flex flex-col items-center">
               <div className="h-[200px] mb-4 flex justify-center">
                 <img src="/img/title.png" alt="title" />
