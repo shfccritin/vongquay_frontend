@@ -9,6 +9,7 @@ import HistoryList from '../components/HistoryList';
 
 export default function Home() {
   const [code, setCode] = useState('');
+  const [turn, setTurn] = useState(1);
   const [isValid, setIsValid] = useState(false);
   const [rewards, setRewards] = useState([]);
   const [rewardsCode, setRewardsCode] = useState(null);
@@ -127,7 +128,7 @@ export default function Home() {
   const handleSpinEnd = async (reward) => {
     setResult(reward.label);
     setRewardsCode(reward.code);
-
+    setTurn(0);
     Swal.fire({
       title: '🎉 Chúc mừng!',
       html: `
@@ -281,7 +282,7 @@ export default function Home() {
                     className="text-special-2 justify-center text-[34.71px] font-extrabold
                       font-['SF_Pro_Display'] uppercase"
                   >
-                    99999
+                    {turn}
                   </div>
                 </div>
               </div>
