@@ -4,7 +4,7 @@ import React from 'react';
 export default function RewardList({ rewards }) {
   return (
     <div
-      className="w-full h-[93vh] px-6 overflow-auto no-scrollbar flex-col inline-flex
+      className="w-full h-[93vh] p-6 overflow-auto no-scrollbar flex-col inline-flex
         justify-start items-start gap-8"
     >
       {rewards.map((item, i) => (

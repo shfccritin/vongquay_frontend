@@ -4,7 +4,7 @@ import React from 'react';
 export default function HistoryList({ logs }) {
   return (
     <div
-      className="test sm:px-6 sm:py-10 px-3 py-5 h-[93vh] overflow-auto relative rounded-3xl
+      className="m-6 test sm:px-6 sm:py-10 px-3 py-5 h-[90vh] overflow-auto relative rounded-3xl
         outline-1 outline-offset-[-1.16px] outline-black/20 backdrop-blur-md
         no-scrollbar"
     >
