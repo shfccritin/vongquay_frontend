@@ -257,6 +257,7 @@ export default function Home() {
                 ref={wheelRef}
                 segments={rewards}
                 onSpinEnd={handleSpinEnd}
+                code={code}
               />
               <div
                 className="w-84 sm:w-96 mt-8 h-16 relative
