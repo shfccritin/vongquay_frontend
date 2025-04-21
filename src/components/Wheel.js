@@ -113,15 +113,11 @@ const Wheel = forwardRef(
 
     const handleSpin = async () => {
       try {
-        console.log(6969, code);
-
         const res = await axios.post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/spin`,
           { code },
         );
         if (res.data.success) {
-          console.log(res.data);
-
           const rewardLabel = res.data.reward.label;
           const index = segments.findIndex((r) => r.label === rewardLabel);
           if (index !== -1) {
@@ -129,8 +125,6 @@ const Wheel = forwardRef(
           }
         }
       } catch (err) {
-        console.log('err', err);
-
         Swal.fire({
           icon: 'error',
           title: 'Lỗi!',
