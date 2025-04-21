@@ -4,8 +4,9 @@ import React from 'react';
 export default function HistoryList({ logs }) {
   return (
     <div
-      className="test sm:px-6 sm:py-10 px-3 py-5 h-[889px] relative rounded-3xl outline-1
-        outline-offset-[-1.16px] outline-black/20 backdrop-blur-md overflow-hidden"
+      className="test sm:px-6 sm:py-10 px-3 py-5 h-[93vh] overflow-auto relative rounded-3xl
+        outline-1 outline-offset-[-1.16px] outline-black/20 backdrop-blur-md
+        no-scrollbar"
     >
       <div className="w-full inline-flex flex-col justify-start items-start gap-9">
         <div className="inline-flex justify-start items-center gap-2">

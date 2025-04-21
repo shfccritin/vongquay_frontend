@@ -166,7 +166,7 @@ export default function Home() {
       </h1> */}
 
       {/* {!isValid ? ( */}
-      {!isValid ? (
+      {false ? (
         <div className="flex flex-col 2xl:flex-row gap-8 justify-center items-start">
           {/* <div className="flex justify-center gap-3 mb-6 flex-wrap">
             <input
@@ -249,8 +249,8 @@ export default function Home() {
           </div>
 
           {/* 🎡 Vòng quay */}
-          <div className="2xl:w-[30%] w-full flex flex-col items-center justify-center">
-            <div className="max-w-[600px] flex flex-col items-center">
+          <div className="2xl:w-[35%] w-full flex flex-col items-center justify-center">
+            <div className="max-w-[600px] w-full flex flex-col items-center">
               <div className="h-[200px] mb-4 flex justify-center">
                 <img src="/img/title.png" alt="title" />
               </div>
