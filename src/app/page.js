@@ -166,7 +166,7 @@ export default function Home() {
       </h1> */}
 
       {/* {!isValid ? ( */}
-      {false ? (
+      {!isValid ? (
         <div className="flex flex-col 2xl:flex-row gap-8 justify-center items-start">
           {/* <div className="flex justify-center gap-3 mb-6 flex-wrap">
             <input
