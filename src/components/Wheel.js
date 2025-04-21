@@ -92,7 +92,7 @@ const Wheel = forwardRef(
       const rotations = 6;
       // Tính góc cần quay sao cho segment giữa trùng với kim chỉ
       const targetRad =
-        rotations * 2 * Math.PI + (Math.PI / 2 - (targetIndex + 2) * arcSize);
+        rotations * 2 * Math.PI + (Math.PI / 2 - (targetIndex + 1) * arcSize);
       const duration = 3000;
       const start = performance.now();
       setSpinning(true);
