@@ -92,7 +92,7 @@ const Wheel = forwardRef(
       const rotations = 6;
       // Tính góc cần quay sao cho segment giữa trùng với kim chỉ
       const targetRad =
-        rotations * 2 * Math.PI + (Math.PI / 2 - (targetIndex + 1) * arcSize);
+        rotations * 2 * Math.PI + (Math.PI / 2 - (targetIndex + 3) * arcSize);
       const duration = 3000;
       const start = performance.now();
       setSpinning(true);
@@ -164,7 +164,7 @@ const Wheel = forwardRef(
           onClick={() => {
             // spinToIndex(Math.floor(Math.random() * segments.length), null)
             handleSpin();
-            // spinToIndex(1);
+            // spinToIndex(2);
           }}
           className="absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2 z-20 w-[20%]
             h-[20%] p-0"
