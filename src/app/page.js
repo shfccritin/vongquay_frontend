@@ -202,6 +202,8 @@ export default function Home() {
               <div className="w-full sm:flex-row flex-col flex items-center justify-center gap-4">
                 <input
                   type="text"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
                   placeholder="Nhập mã dự thưởng..."
                   className="w-full md:w-[591.13px] h-12 bg-slate-800 rounded-[743.56px] border-4
                     border-slate-600 p-3 text-white placeholder-gray-400"
