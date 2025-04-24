@@ -8,16 +8,14 @@ import Header from '../../../components/header';
 export default function AdminDashboard() {
   const [codes, setCodes] = useState([]);
   const [newCode, setNewCode] = useState("");
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true); // Thêm state check token
   const router = useRouter();
+
   const fetchCodes = async () => {
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/codes`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/codes`);
       setCodes(res.data);
     } catch (err) {
-
       Swal.fire({
         icon: 'error',
         title: 'Lỗi!',
@@ -25,6 +23,27 @@ export default function AdminDashboard() {
       });
     }
   };
+
+  // Check token trước khi render UI
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/admin"); // Redirect nếu chưa đăng nhập
+    } else {
+      // Set token mặc định cho axios
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      setIsCheckingAuth(false); // Cho phép render UI
+      fetchCodes(); // Fetch data ngay khi có token
+    }
+  }, [router]);
+
+  if (isCheckingAuth) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-slate-50">
+        <p className="text-lg text-gray-600">🔒 Đang kiểm tra đăng nhập...</p>
+      </div>
+    );
+  }
 
   const handleAdd = async () => {
     if (!newCode) {
@@ -37,9 +56,7 @@ export default function AdminDashboard() {
     }
 
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/codes`, { code: newCode }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/codes`, { code: newCode });
 
       Swal.fire({
         icon: 'success',
@@ -60,8 +77,6 @@ export default function AdminDashboard() {
     }
   };
 
-
-
   const handleDelete = async (id) => {
     const result = await Swal.fire({
       title: "Bạn có chắc chắn muốn xoá?",
@@ -76,9 +91,7 @@ export default function AdminDashboard() {
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/codes/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/codes/${id}`);
 
         Swal.fire({
           icon: 'success',
@@ -99,19 +112,10 @@ export default function AdminDashboard() {
     }
   };
 
-
-  useEffect(() => {
-    const t = localStorage.getItem("token");
-    if (!t) {
-      router.push("/admin"); // Redirect nếu chưa đăng nhập
-    } else {
-      fetchCodes(t);
-    }
-  }, []);
-
   return (
     <main className="p-8 bg-slate-50 min-h-screen">
       <Header></Header>
+      {/* ==== Các phần còn lại giữ nguyên ==== */}
       <div className="flex items-center gap-4 mb-6">
         <input
           type="file"
@@ -127,12 +131,7 @@ export default function AdminDashboard() {
               const res = await axios.post(
                 `${process.env.NEXT_PUBLIC_API_URL}/api/admin/codes/import`,
                 formData,
-                {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "multipart/form-data",
-                  },
-                }
+                { headers: { "Content-Type": "multipart/form-data" } }
               );
 
               const { imported, duplicated } = res.data;
@@ -142,12 +141,12 @@ export default function AdminDashboard() {
                   icon: "warning",
                   title: "Một số mã đã tồn tại",
                   html: `
-            <p>✅ <b>${imported}</b> mã mới đã được thêm.</p>
-            <p>⚠️ <b>${duplicated.length}</b> mã bị trùng:</p>
-            <pre style="text-align:left; max-height:150px; overflow:auto; background:#f9f9f9; padding:6px; border-radius:4px;">
+                    <p>✅ <b>${imported}</b> mã mới đã được thêm.</p>
+                    <p>⚠️ <b>${duplicated.length}</b> mã bị trùng:</p>
+                    <pre style="text-align:left; max-height:150px; overflow:auto; background:#f9f9f9; padding:6px; border-radius:4px;">
 ${duplicated.join("\n")}
-            </pre>
-          `,
+                    </pre>
+                  `,
                   width: 500,
                 });
               } else {
@@ -169,17 +168,14 @@ ${duplicated.join("\n")}
               });
             }
 
-            // 👉 Reset input sau khi xử lý
-            e.target.value = "";
+            e.target.value = ""; // Reset input
           }}
           className="border px-3 py-2 rounded bg-white w-64"
         />
-
         <span className="text-gray-600 text-sm">
           * File .xlsx cần có cột <code>code</code>
         </span>
       </div>
-
 
       <div className="flex gap-2 mb-6">
         <input
@@ -208,10 +204,7 @@ ${duplicated.join("\n")}
         </thead>
         <tbody>
           {codes.map((c, i) => (
-            <tr
-              key={c._id}
-              className="border-t hover:bg-pink-50 transition"
-            >
+            <tr key={c._id} className="border-t hover:bg-pink-50 transition">
               <td className="px-4 py-2 text-sm">{i + 1}</td>
               <td className="px-4 py-2 font-mono text-sm">{c.code}</td>
               <td className="px-4 py-2 text-sm text-center">
@@ -233,7 +226,6 @@ ${duplicated.join("\n")}
           ))}
         </tbody>
       </table>
-
     </main>
   );
 }

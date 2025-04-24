@@ -6,6 +6,7 @@ import TabSwitcher from '../components/tab-switcher';
 import Swal from 'sweetalert2';
 import RewardList from '../components/RewardList';
 import HistoryList from '../components/HistoryList';
+import Snowfall from '../components/Snowfall';
 
 export default function Home() {
   const [code, setCode] = useState('');
@@ -129,6 +130,15 @@ export default function Home() {
     setResult(reward.label);
     setRewardsCode(reward.code);
     setTurn(0);
+  
+    // 🎆 Pháo hoa
+    const confetti = (await import('canvas-confetti')).default;
+    confetti({
+      particleCount: 150,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  
     Swal.fire({
       title: '🎉 Chúc mừng!',
       html: `
@@ -136,8 +146,8 @@ export default function Home() {
         <p>🔑 Mã: <b>${reward.code}</b></p>
         <p class="mt-4">🎯 Xác thực Telegram để nhận mã quà:</p>
         <div id="telegram-login-container" class="flex justify-center mt-3">
-  <div id="telegram-login"></div>
-</div>
+          <div id="telegram-login"></div>
+        </div>
       `,
       didOpen: () => {
         if (!document.getElementById('telegram-login').hasChildNodes()) {
@@ -154,6 +164,7 @@ export default function Home() {
       showConfirmButton: false,
     });
   };
+  ;
 
   return (
     <main
@@ -161,29 +172,10 @@ export default function Home() {
         [background-image:linear-gradient(180deg,_rgba(255,255,255,0)_46.01%,_#FFF_100%),url('/img/bg.jpg')]
         p-3 sm:p-6"
     >
-      {/* <h1 className="text-3xl md:text-4xl font-bold text-pink-600 text-center mb-8">
-        🎯 Vòng quay dự thưởng
-      </h1> */}
+       <Snowfall />
 
-      {/* {!isValid ? ( */}
       {!isValid ? (
         <div className="flex flex-col 2xl:flex-row gap-8 justify-center items-start">
-          {/* <div className="flex justify-center gap-3 mb-6 flex-wrap">
-            <input
-              type="text"
-              placeholder="Nhập mã dự thưởng..."
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              className="p-3 border rounded w-64"
-            />
-            <button
-              onClick={handleCheckCode}
-              className="bg-green-500 text-white px-5 py-3 rounded font-semibold hover:bg-green-600
-                transition"
-            >
-              Kiểm tra mã
-            </button>
-          </div> */}
           <div
             className="w-full mt-15 max-w-[924px] inline-flex flex-col items-center gap-16 mx-auto
               2xl:mx-0"

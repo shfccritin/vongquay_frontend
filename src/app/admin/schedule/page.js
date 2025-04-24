@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Header from '../../../components/header';
-
 import { useRouter } from 'next/navigation';
 
 export default function SchedulePage() {
@@ -17,6 +16,7 @@ export default function SchedulePage() {
     link: '',
     countdown: 10,
   });
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true); // Thêm dòng này
 
   const router = useRouter();
 
@@ -33,12 +33,12 @@ export default function SchedulePage() {
     );
   }, []);
 
-  // 👉 Redirect nếu chưa đăng nhập
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
       router.push('/admin');
     } else {
+      setIsCheckingAuth(false); // Thêm dòng này
       fetchSchedules();
     }
   }, [router]);
@@ -50,20 +50,19 @@ export default function SchedulePage() {
 
   const handleAdd = async () => {
     const { blv, time, date, countdown } = form;
-  
-    // Kiểm tra dữ liệu đầu vào
+
     if (!blv || !time || !date) {
       return Swal.fire('Thiếu thông tin', 'Vui lòng nhập đầy đủ Tên BLV, Thời gian và Ngày!', 'warning');
     }
-  
+
     if (!/^\d{1,2}h\d{1,2}$/.test(time)) {
       return Swal.fire('Sai định dạng giờ', 'Định dạng phải là ví dụ: 21h30', 'warning');
     }
-   
+
     if (isNaN(countdown) || countdown < 0) {
       return Swal.fire('Countdown không hợp lệ', 'Countdown phải là số không âm', 'warning');
     }
-  
+
     try {
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/schedules`, form);
       setForm({ blv: '', time: '', date: '', game: '', link: '', countdown: 10 });
@@ -73,7 +72,6 @@ export default function SchedulePage() {
       Swal.fire('Lỗi!', err.response?.data?.message || 'Không thể thêm lịch.', 'error');
     }
   };
-  
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
@@ -89,12 +87,19 @@ export default function SchedulePage() {
     }
   };
 
+  if (isCheckingAuth) { // Thêm đoạn này
+    return (
+      <div className="flex justify-center items-center h-screen bg-white">
+        <p className="text-lg text-gray-600">🔒 Đang kiểm tra đăng nhập...</p>
+      </div>
+    );
+  }
+
   return (
     <main className="p-6 max-xl mx-auto bg-white min-h-screen">
       <Header />
       <h1 className="text-xl font-bold mb-4">🗓 Quản lý lịch phát livestream</h1>
 
-      {/* Form thêm */}
       <div className="grid grid-cols-2 gap-4 mb-6">
         <input placeholder="Tên BLV" className="border px-3 py-2 rounded" value={form.blv} onChange={(e) => setForm({ ...form, blv: e.target.value })} />
         <input placeholder="Thời gian (vd: 21h30)" className="border px-3 py-2 rounded" value={form.time} onChange={(e) => setForm({ ...form, time: e.target.value })} />
@@ -105,7 +110,6 @@ export default function SchedulePage() {
         <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={handleAdd}>➕ Thêm lịch</button>
       </div>
 
-      {/* Danh sách */}
       <table className="w-full text-sm border">
         <thead className="bg-gray-100">
           <tr>

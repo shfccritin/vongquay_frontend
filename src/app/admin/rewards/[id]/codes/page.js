@@ -4,22 +4,19 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import Header from '../../../../../components/header';
-
-
 import { use } from "react";
+
 export default function ImportRewardCodes({ params }) {
   const [codeText, setCodeText] = useState("");
   const [file, setFile] = useState(null);
   const [codesList, setCodesList] = useState([]);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true); // Thêm dòng này
   const router = useRouter();
   const { id: rewardId } = use(params);
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   const fetchCodes = async () => {
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/reward-codes/${rewardId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/reward-codes/${rewardId}`);
       setCodesList(res.data || []);
     } catch (err) {
       console.error("Không thể tải danh sách mã:", err);
@@ -36,8 +33,6 @@ export default function ImportRewardCodes({ params }) {
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/reward-codes/import`, {
         rewardId,
         codes
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
       });
 
       Swal.fire({
@@ -67,10 +62,7 @@ export default function ImportRewardCodes({ params }) {
 
     try {
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/reward-codes/import-file`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data"
-        }
+        headers: { "Content-Type": "multipart/form-data" }
       });
 
       Swal.fire({
@@ -94,16 +86,25 @@ export default function ImportRewardCodes({ params }) {
     if (!token) {
       router.push("/admin");
     } else {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`; // Set token cho axios
+      setIsCheckingAuth(false); // Cho phép render UI
       fetchCodes();
     }
   }, []);
+
+  if (isCheckingAuth) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gradient-to-br from-pink-50 to-yellow-50">
+        <p className="text-lg text-gray-600">🔒 Đang kiểm tra đăng nhập...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 md:p-10 bg-gradient-to-br from-pink-50 to-yellow-50 min-h-screen mx-auto">
       <Header />
       <h1 className="text-3xl font-bold text-pink-600 mb-8">🎁 Nhập mã đổi thưởng</h1>
 
-      {/* Danh sách mã đã nhập */}
       <div className="bg-white rounded-xl shadow p-6 border">
         <h2 className="text-xl font-semibold mb-4 text-gray-700">
           📋 Danh sách mã đã thêm
@@ -130,7 +131,6 @@ export default function ImportRewardCodes({ params }) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 mt-5">
-        {/* Nhập thủ công */}
         <div className="bg-white p-6 rounded-xl shadow-lg border">
           <h2 className="text-lg font-semibold text-gray-700 mb-3">✍️ Nhập thủ công</h2>
           <textarea
@@ -148,7 +148,6 @@ export default function ImportRewardCodes({ params }) {
           </button>
         </div>
 
-        {/* Upload file */}
         <div className="bg-white p-6 rounded-xl shadow-lg border">
           <h2 className="text-lg font-semibold text-gray-700 mb-3">📂 Nhập từ file (.txt hoặc .xlsx)</h2>
           <input

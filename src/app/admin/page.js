@@ -1,39 +1,49 @@
 'use client'
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Swal from "sweetalert2"; // Đảm bảo đã import nếu dùng SweetAlert
+import Swal from "sweetalert2";
 
 export default function AdminLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [token, setToken] = useState(null);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true); // Thêm state kiểm tra token
 
-  // 👉 Kiểm tra nếu đã đăng nhập thì redirect
   useEffect(() => {
     const savedToken = localStorage.getItem("token");
     if (savedToken) {
       window.location.href = "/admin/dashboard";
+    } else {
+      setIsCheckingAuth(false); // Cho phép render UI nếu không có token
     }
   }, []);
 
   const handleLogin = async () => {
+    if (!username || !password) {
+      return Swal.fire({
+        icon: 'warning',
+        title: 'Thiếu thông tin!',
+        text: 'Vui lòng nhập đủ tên đăng nhập và mật khẩu.',
+      });
+    }
+
     try {
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/login`, {
         username,
         password
       });
-      setToken(res.data.token);
+
       localStorage.setItem("token", res.data.token);
+
       Swal.fire({
         icon: 'success',
         title: 'Thành công!',
         text: 'Đăng nhập thành công!',
         timer: 2000,
         showConfirmButton: false,
-      }).then( () => {
-        window.location.href = "/admin/dashboard"
+      }).then(() => {
+        window.location.href = "/admin/dashboard";
       });
-     
+
     } catch (err) {
       Swal.fire({
         icon: 'error',
@@ -42,6 +52,14 @@ export default function AdminLogin() {
       });
     }
   };
+
+  if (isCheckingAuth) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-slate-50">
+        <p className="text-gray-600 text-lg">🔒 Đang kiểm tra đăng nhập...</p>
+      </div>
+    );
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-slate-50 p-6">

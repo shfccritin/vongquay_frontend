@@ -8,13 +8,25 @@ export default function BroadcastPage() {
   const [message, setMessage] = useState(`🚨 *SẮP LIVE PK RỒI ĐÂY ANH/CHỊ ƠI!*\n🎁 Chuẩn bị nhận code & quà siêu hot\n🕒 Bắt đầu sau 15 phút nữa nha!`);
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
-  
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true); // Thêm state check token
+
+  // Check login token
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
-      router.push('/admin'); 
+      router.push('/admin'); // Redirect nếu không có token
+    } else {
+      setIsCheckingAuth(false); // Cho phép render UI
     }
   }, [router]);
+
+  if (isCheckingAuth) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-lg text-gray-600">🔒 Đang kiểm tra đăng nhập...</p>
+      </div>
+    );
+  }
 
   const sendBroadcast = async () => {
     const token = localStorage.getItem('token');
@@ -55,7 +67,7 @@ export default function BroadcastPage() {
   };
 
   return (
-    <>
+    <div className='p-8 bg-slate-50 min-h-screen'>
       <Header />
       <div className="p-6 max-w-xl mx-auto text-center bg-white">
         <h1 className="text-2xl font-bold mb-4">📢 Gửi thông báo livestream</h1>
@@ -78,6 +90,6 @@ export default function BroadcastPage() {
 
         {status && <p className="mt-4 text-sm">{status}</p>}
       </div>
-    </>
+    </div>
   );
 }

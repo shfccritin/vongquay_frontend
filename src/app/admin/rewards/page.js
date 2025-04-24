@@ -6,6 +6,7 @@ import Header from '../../../components/header';
 import Swal from 'sweetalert2';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+
 export default function AdminRewards() {
   const [rewards, setRewards] = useState([]);
   const [form, setForm] = useState({
@@ -15,22 +16,17 @@ export default function AdminRewards() {
     isFake: false,
   });
   const [editingId, setEditingId] = useState(null);
-  const token =
-    typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true); // Thêm dòng này
   const router = useRouter();
 
   const fetchRewards = async () => {
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/admin/rewards`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
+      `${process.env.NEXT_PUBLIC_API_URL}/api/admin/rewards`
     );
     setRewards(res.data);
   };
 
   const handleSubmit = async () => {
-    // ⚠️ Validate phía client
     if (!form.label || form.label.trim() === '') {
       Swal.fire({
         icon: 'warning',
@@ -61,9 +57,7 @@ export default function AdminRewards() {
 
       const method = editingId ? 'put' : 'post';
 
-      await axios[method](url, form, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios[method](url, form);
 
       Swal.fire({
         icon: 'success',
@@ -108,10 +102,7 @@ export default function AdminRewards() {
     if (result.isConfirmed) {
       try {
         await axios.delete(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/admin/rewards/${id}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
+          `${process.env.NEXT_PUBLIC_API_URL}/api/admin/rewards/${id}`
         );
 
         Swal.fire({
@@ -138,14 +129,24 @@ export default function AdminRewards() {
     if (!t) {
       router.push('/admin');
     } else {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${t}`; // Gắn token cho axios
+      setIsCheckingAuth(false); // Xong thì cho render UI
       fetchRewards();
     }
   }, []);
+
+  if (isCheckingAuth) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gradient-to-br from-yellow-50 to-pink-100">
+        <p className="text-lg text-gray-600">🔒 Đang kiểm tra đăng nhập...</p>
+      </div>
+    );
+  }
+
   return (
     <main className="p-8 bg-gradient-to-br from-yellow-50 to-pink-100 min-h-screen">
       <Header />
 
-      {/* Form nhập hoặc sửa */}
       <div className="bg-white p-6 rounded-xl shadow-md mb-8 space-y-4">
         <h2 className="text-xl font-bold text-pink-600">
           {editingId ? '✏️ Cập nhật giải thưởng' : '➕ Thêm giải thưởng mới'}
@@ -192,7 +193,6 @@ export default function AdminRewards() {
         </div>
       </div>
 
-      {/* Danh sách */}
       <div className="bg-white rounded-xl shadow-md overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-pink-100 text-pink-700 text-left">
@@ -214,24 +214,19 @@ export default function AdminRewards() {
                 <td className="px-6 py-3 text-center space-x-2">
                   <button
                     onClick={() => handleEdit(r)}
-                    className="inline-flex items-center gap-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full
-                      hover:bg-blue-200 transition"
+                    className="inline-flex items-center gap-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full hover:bg-blue-200 transition"
                   >
                     ✏️ <span className="hidden sm:inline">Sửa</span>
                   </button>
-
                   <button
                     onClick={() => handleDelete(r._id)}
-                    className="inline-flex items-center gap-1 bg-red-100 text-red-700 px-3 py-1 rounded-full
-                      hover:bg-red-200 transition"
+                    className="inline-flex items-center gap-1 bg-red-100 text-red-700 px-3 py-1 rounded-full hover:bg-red-200 transition"
                   >
                     🗑️ <span className="hidden sm:inline">Xoá</span>
                   </button>
-
                   <Link
                     href={`/admin/rewards/${r._id}/codes`}
-                    className="inline-flex items-center gap-1 bg-green-100 text-green-700 px-3 py-1
-                      rounded-full hover:bg-green-200 transition"
+                    className="inline-flex items-center gap-1 bg-green-100 text-green-700 px-3 py-1 rounded-full hover:bg-green-200 transition"
                   >
                     🔑 <span className="hidden sm:inline">Mã code</span>
                   </Link>

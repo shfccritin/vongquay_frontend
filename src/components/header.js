@@ -16,11 +16,8 @@ export default function AdminHeader() {
     { href: "/", label: "Trang chủ" },
     { href: "/admin/dashboard", label: "Mã Dự Thưởng" },
     { href: "/admin/rewards", label: "Giải thưởng" },
-    { href: "/admin/logs", label: "Lịch sử quay" },
-    { href: "/admin/broadcast", label: "Broadcast" },
-    { href: "/admin/chat", label: "Chat" },
-    { href: "/admin/schedule", label: "Lịch Bình Luận" },
-    { href: "/admin/import", label: "Import" },
+    { href: "/admin/schedule", label: "Lịch Thông Báo Bot" },
+    { href: "/admin/chat", label: "Bé Báo Tin Chat" },
   ];
 
   return (
