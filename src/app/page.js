@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import RewardList from '../components/RewardList';
 import HistoryList from '../components/HistoryList';
 import Snowfall from '../components/Snowfall';
+import 'animate.css';
 
 export default function Home() {
   const [code, setCode] = useState('');
@@ -17,6 +18,8 @@ export default function Home() {
   const [result, setResult] = useState(null);
   const [logs, setLogs] = useState([]);
   const wheelRef = useRef();
+
+
 
   useEffect(() => {
     const fetchRewards = async () => {
@@ -88,6 +91,8 @@ export default function Home() {
 
   const handleCheckCode = async () => {
     try {
+      const clickSound = new Audio('/sound/click.mp3');
+      clickSound.play();
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/check-code`,
         { code },
@@ -130,15 +135,45 @@ export default function Home() {
     setResult(reward.label);
     setRewardsCode(reward.code);
     setTurn(0);
-  
+    document.body.classList.add('bg-pulse');
+    setTimeout(() => document.body.classList.remove('bg-pulse'), 5000);
+
     // 🎆 Pháo hoa
     const confetti = (await import('canvas-confetti')).default;
+
+    // Bắn từ giữa
     confetti({
-      particleCount: 150,
+      particleCount: 100,
       spread: 70,
-      origin: { y: 0.6 }
+      origin: { y: 0.6 },
     });
-  
+
+    // Bắn hai bên cho máu
+    confetti({
+      particleCount: 80,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0, y: 0.6 },
+    });
+
+    confetti({
+      particleCount: 80,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1, y: 0.6 },
+    });
+
+    // Bắn từ dưới lên cho nó bùng nổ
+    confetti({
+      particleCount: 60,
+      angle: 90,
+      spread: 80,
+      origin: { y: 1 }
+    });
+
+    const winSound = new Audio('/sound/win.mp3');
+    winSound.play();
+    
     Swal.fire({
       title: '🎉 Chúc mừng!',
       html: `
@@ -149,6 +184,13 @@ export default function Home() {
           <div id="telegram-login"></div>
         </div>
       `,
+      showClass: {
+        popup: 'animate__animated animate__tada animate__repeat-2' // Lặp 2 lần cho xôi nổi
+      },
+      hideClass: {
+        popup: 'animate__animated animate__fadeOutUp'
+      },
+      
       didOpen: () => {
         if (!document.getElementById('telegram-login').hasChildNodes()) {
           const script = document.createElement('script');
@@ -164,7 +206,7 @@ export default function Home() {
       showConfirmButton: false,
     });
   };
-  ;
+  
 
   return (
     <main
@@ -172,7 +214,7 @@ export default function Home() {
         [background-image:linear-gradient(180deg,_rgba(255,255,255,0)_46.01%,_#FFF_100%),url('/img/bg.jpg')]
         p-3 sm:p-6"
     >
-       <Snowfall />
+      <Snowfall />
 
       {!isValid ? (
         <div className="flex flex-col 2xl:flex-row gap-8 justify-center items-start">

@@ -93,7 +93,7 @@ const Wheel = forwardRef(
       // Tính góc cần quay sao cho segment giữa trùng với kim chỉ
       const targetRad =
         rotations * 2 * Math.PI + (Math.PI / 2 - (targetIndex + 3) * arcSize);
-      const duration = 3000;
+      const duration = 26000;
       const start = performance.now();
       setSpinning(true);
       const animate = (now) => {
@@ -113,11 +113,14 @@ const Wheel = forwardRef(
 
     const handleSpin = async () => {
       try {
+      
         const res = await axios.post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/spin`,
           { code },
         );
         if (res.data.success) {
+          const spinSound = new Audio('/sound/quay.mp3');
+          spinSound.play()
           const rewardLabel = res.data.reward.label;
           const index = segments.findIndex((r) => r.label === rewardLabel);
           if (index !== -1) {
@@ -161,10 +164,7 @@ const Wheel = forwardRef(
 
         {/* Nút Quay */}
         <button
-          onClick={() => {
-            // spinToIndex(Math.floor(Math.random() * segments.length), null)
-            handleSpin();
-            // spinToIndex(2);
+          onClick={() => {  handleSpin();
           }}
           className="absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2 z-20 w-[20%]
             h-[20%] p-0"

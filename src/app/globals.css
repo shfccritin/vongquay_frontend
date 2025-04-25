@@ -72,3 +72,14 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+@keyframes backgroundPulse {
+  0% { background-color: #ffeb3b; }
+  25% { background-color: #f44336; }
+  50% { background-color: #4caf50; }
+  75% { background-color: #2196f3; }
+  100% { background-color: #ffeb3b; }
+}
+
+.bg-pulse {
+  animation: backgroundPulse 1s infinite;
+}
