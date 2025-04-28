@@ -253,27 +253,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          {/* <div className="w-full 2xl:w-1/4 bg-white rounded-xl shadow p-5">
-            <h2 className="text-lg font-bold text-center mb-4 text-pink-600">
-              🕓 Lịch sử quay
-            </h2>
-            <ul className="space-y-3 text-sm max-h-[420px] overflow-y-auto pr-2">
-              {logs.map((log, index) => (
-                <li key={index} className="border-b pb-2">
-                  <div className="font-medium">
-                    🎫 Mã: <span className="text-gray-700">{log.code}</span>
-                  </div>
-                  <div>
-                    🎁 Phần thưởng:{' '}
-                    <b className="text-pink-600">{log.reward}</b>
-                  </div>
-                  <div className="text-xs text-gray-400 italic">
-                    {new Date(log.createdAt).toLocaleString('vi-VN')}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div> */}
+          
         </div>
       ) : (
         <div className="flex w-full flex-col 2xl:flex-row gap-20 justify-center items-start">
