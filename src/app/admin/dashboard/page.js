@@ -8,7 +8,10 @@ import Header from '../../../components/header';
 export default function AdminDashboard() {
   const [codes, setCodes] = useState([]);
   const [newCode, setNewCode] = useState("");
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true); // Thêm state check token
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [rewards, setRewards] = useState([]);
+  const [selectedRewardId, setSelectedRewardId] = useState("");
+
   const router = useRouter();
 
   const fetchCodes = async () => {
@@ -24,18 +27,29 @@ export default function AdminDashboard() {
     }
   };
 
-  // Check token trước khi render UI
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      router.push("/admin"); // Redirect nếu chưa đăng nhập
+      router.push("/admin");
     } else {
-      // Set token mặc định cho axios
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      setIsCheckingAuth(false); // Cho phép render UI
-      fetchCodes(); // Fetch data ngay khi có token
+      setIsCheckingAuth(false);
+      fetchCodes();
+
+      // ✅ Chỉ fetch rewards sau khi token có
+      const fetchRewards = async () => {
+        try {
+          const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/rewards`);
+          setRewards(res.data);
+        } catch (err) {
+          console.error("Không thể tải danh sách rewards", err);
+        }
+      };
+      fetchRewards();
     }
   }, [router]);
+
+
 
   if (isCheckingAuth) {
     return (
@@ -56,7 +70,10 @@ export default function AdminDashboard() {
     }
 
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/codes`, { code: newCode });
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/codes`, {
+        code: newCode,
+        rewardId: selectedRewardId
+      });
 
       Swal.fire({
         icon: 'success',
@@ -173,7 +190,8 @@ ${duplicated.join("\n")}
           className="border px-3 py-2 rounded bg-white w-64"
         />
         <span className="text-gray-600 text-sm">
-          * File .xlsx cần có cột <code>code</code>
+          * File .xlsx cần có 2 cột <code>code</code> và <code>reward</code>
+
         </span>
       </div>
 
@@ -185,6 +203,16 @@ ${duplicated.join("\n")}
           placeholder="Nhập mã mới"
           className="border px-3 py-2 rounded w-64"
         />
+        <select
+          className="border px-3 py-2 rounded w-64"
+          value={selectedRewardId}
+          onChange={(e) => setSelectedRewardId(e.target.value)}
+        >
+          <option value="">-- Chọn giải thưởng --</option>
+          {rewards.map(r => (
+            <option key={r._id} value={r._id}>{r.label}</option>
+          ))}
+        </select>
         <button
           onClick={handleAdd}
           className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
@@ -199,6 +227,7 @@ ${duplicated.join("\n")}
             <th className="px-4 py-3 text-left">#</th>
             <th className="px-4 py-3">Mã</th>
             <th className="px-4 py-3">Trạng thái</th>
+            <th className="px-4 py-3">Giải thưởng</th>
             <th className="px-4 py-3 text-center">Hành động</th>
           </tr>
         </thead>
@@ -214,6 +243,7 @@ ${duplicated.join("\n")}
                   <span className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-semibold">Chưa dùng</span>
                 )}
               </td>
+              <td className="px-4 py-2 text-sm text-center">{c.rewardId?.label || 'Không có'}</td>
               <td className="px-4 py-2 text-center">
                 <button
                   onClick={() => handleDelete(c._id)}

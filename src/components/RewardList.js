@@ -24,10 +24,10 @@ export default function RewardList({ rewards }) {
               alt={`top-${i + 1}`}
             />
             <div className="w-16 h-14 left-[112.88px] top-[11.79px] absolute">
-              <img
-                className="w-8 h-14 left-[24.69px] top-0 absolute"
-                src={item.image}
-              />
+              {item.image ? (
+                <img className="..." src={item.image} />
+              ) : null}
+
             </div>
             <div
               className="left-[215.02px] top-[30.29px] absolute justify-center text-stone-950 text-lg
